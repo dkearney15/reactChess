@@ -6,8 +6,10 @@ import Row from '../StyledComponents/row.js';
 import Space from '../StyledComponents/space.js';
 
 import { move } from '../Actions/boardActions.js';
+import { incrementTurnCount } from '../Actions/turnActions.js';
 
 function mapStateToProps(state) {
+    console.log(state);
     return {
         rows: state.board.grid,
         turnTakingColor: state.turns % 2 === 0 ? 'white' : 'black'
@@ -23,26 +25,25 @@ class Board extends Component {
     constructor (props) {
         super();
         this.state = {
-            ...props,
             startPiece: null,
         }
     }
 
     startMove = space => {
-        console.log('start: ', space);
         if (space.color === this.props.turnTakingColor) this.setState({startPiece: space});        
     }
 
     finishMove = space => {
-        console.log('proposed move: ', space);
-        // get validMoves, IF move is valid dispatch action ELSE setState startPiece to null
-        if (true) this.setState({startPiece: null}, () => {
-            this.props.dispatch(move(this.state.startPiece, space));
-        });
+        // validate here
+        this.props.dispatch(move(this.state.startPiece, space));
+        this.props.dispatch(incrementTurnCount());
+        this.setState({startPiece: null});
     }
     
     render() {
-        const { rows, startPiece } = this.state;
+        const startPiece = this.state.startPiece;
+        const rows = this.props.rows;
+        console.log(startPiece);
         return (
             <StyledBoard>
                 {

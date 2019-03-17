@@ -2,8 +2,8 @@ import PieceFactory from '../piece/factory.js';
 
 export default class Board {
 
-	constructor() {
-		this.grid = function(){
+	constructor(grid) {
+		this.grid = grid || function(){
 			let arr = []
 			for (let i = 0; i < 8; i++) {
 				arr[i] = []
