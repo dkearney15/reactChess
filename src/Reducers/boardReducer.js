@@ -9,15 +9,18 @@ newBoard.populatePieces();
 export default (state=newBoard, action) => {
     switch (action.type) {
         case 'MOVE':
-            const { startSpace, endSpace } = action.payload;
+            // state.logBoard();
+            const { startSpace, endSpace } = cloneDeep(action.payload);
             const startCoords = startSpace.value;
-            const startPiece = cloneDeep(startSpace);
             const endCoords = endSpace.value;
+            startSpace.value = endCoords;
             const newGrid = cloneDeep(state.grid);
             //make the move
             newGrid[startCoords[0]][startCoords[1]] = new Piece(null, null, startCoords);
-            newGrid[endCoords[0]][endCoords[1]] = startPiece;
-            return new Board(newGrid);
+            newGrid[endCoords[0]][endCoords[1]] = startSpace;
+            const newBoard = new Board(newGrid);
+            // newBoard.logBoard();
+            return newBoard;
         default: 
             return state;
     }

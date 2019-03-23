@@ -2,7 +2,7 @@ export function move(startSpace, endSpace) {
     return {
         type: "MOVE",
         payload: {
-            startSpace, 
+            startSpace,
             endSpace
         }
     }

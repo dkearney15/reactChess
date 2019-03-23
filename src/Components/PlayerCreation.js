@@ -18,9 +18,9 @@ class PlayerCreation extends Component {
     }
     
     createPlayer = event => {
-        const color = this.props.player === 1 ? 'white' : 'black';
+        const color = this.props.player;
         const newPlayer = new Player(color, this.state.name);        
-        this.props.dispatch(setPlayer(this.props.player, newPlayer));
+        this.props.dispatch(setPlayer(color, newPlayer));
         event.preventDefault(); 
     }
     
