@@ -4,10 +4,10 @@ import { connect } from 'react-redux';
 import Button from '../StyledComponents/utils/button';
 import PlayerCreation from './PlayerCreation';
 
-function mapStateToProps(state) {    
+function mapStateToProps(state) {
     return {
-        playerOne: state.players[1],
-        playerTwo: state.players[2]
+        whitePlayer: state.players.white,
+        blackPlayer: state.players.black
     };
 }
 
@@ -18,22 +18,13 @@ function mapDispatchToProps(dispatch) {
 
 
 class StartSequence extends Component {
-    constructor (props) {
-        super();
-
-    }
-
-    setBoard() {
-
-    }
-
     render() {
-        const { playerOne, playerTwo } = this.props;
+        const { whitePlayer, blackPlayer } = this.props;
         return (
             <div>
-                { !playerOne ? <PlayerCreation player={1}/> : null }
-                { !playerTwo ? <PlayerCreation player={2}/> : null }
-                <Button textColor="#7e7f82" backColor="black" disabled={!(playerOne && playerTwo)}>Start Game</Button>
+                { !whitePlayer ? <PlayerCreation player="white"/> : null }
+                { !blackPlayer ? <PlayerCreation player="black"/> : null }
+                <Button textColor="#7e7f82" backColor="black" disabled={!(whitePlayer && blackPlayer)}>Start Game</Button>
             </div>
         );
     }

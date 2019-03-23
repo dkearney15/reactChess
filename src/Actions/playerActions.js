@@ -1,6 +1,9 @@
-export function setPlayer(type, player) {
+export function setPlayer(playerColor, player) {
     return {
-        type, 
-        payload: player
+        type: 'SET_PLAYER', 
+        payload: {
+            playerColor,
+            player
+        }
     }
 }

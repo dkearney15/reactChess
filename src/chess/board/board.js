@@ -2,8 +2,8 @@ import PieceFactory from '../piece/factory.js';
 
 export default class Board {
 
-	constructor() {
-		this.grid = function(){
+	constructor(grid) {
+		this.grid = grid || function(){
 			let arr = []
 			for (let i = 0; i < 8; i++) {
 				arr[i] = []
@@ -73,8 +73,6 @@ export default class Board {
 
 
 	// evaluate(turnColor) {
-	// 	let test = 0;
-
 	// 	const board = this; //for sanity and scoping issues
 	// 	let blackKingPos;
 	// 	let whiteKingPos;
@@ -87,7 +85,6 @@ export default class Board {
 	// 	// run through the board, bigO is constant right now, exactly 64
 	// 	for (let i = 0; i < 8; i++) {
 	// 		for (let j = 0; j < 8; j++) {
-	// 			test += 1;
 	// 			// find the kings
 	// 			if(board.grid[i][j].value === "\u2654"){
 	// 				whiteKingPos = [i,j];
@@ -118,7 +115,6 @@ export default class Board {
 	// 		return opposingPieces.some((opposingPiece) => { // go though opponent's pieces
 	// 			const oppPieceMoves = opposingPiece.moves(); // array of moves for opposing piece
 	// 			return oppPieceMoves.some((opposingMove)=>{
-	// 				test += 1;
 	// 				return opposingMove.toString() === takingTurnKingPos.toString() ? true : false;
 	// 			});
 	// 		});
@@ -150,12 +146,10 @@ export default class Board {
 	// 					if(oppPiece.position.toString() !== moveObj.finish.toString()){
 	// 						const oppPieceMoves = oppPiece.moves(); // array of moves for opposing piece
 	// 						return oppPieceMoves.every(oppPieceMove => {
-	// 							test += 1;
 	// 							// if move equal kingPos board in check
 	// 							return oppPieceMove.toString() === takingTurnKingPos.toString() ? false : true;
 	// 						});
 	// 					} else {
-	// 						test += 1;
 	// 						return true;
 	// 					}
 	// 				});
