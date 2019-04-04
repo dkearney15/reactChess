@@ -6,8 +6,6 @@ export default class Player {
 		this.inCheck = false;
 		this.piecesTaken = [];
 		this.turnsTaken = [];
-		this.piecesLost = [];
 		this.checksForced = 0;
-		this.timesInCheck = 0;
 	}
 }
