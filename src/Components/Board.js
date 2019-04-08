@@ -11,7 +11,7 @@ import { incrementTurnCount } from '../Actions/turnActions.js';
 
 function mapStateToProps(state) {
     return {
-        rows: state.board.grid,
+        board: state.board,
         turnTakingColor: state.turns % 2 === 0 ? 'white' : 'black',
         playersReady: state.players.white && state.players.black
     };
@@ -37,7 +37,7 @@ class Board extends Component {
     finishMove = space => {
         // validate here
         const startPiece = this.state.startPiece;
-        const grid = this.props.rows;
+        const grid = this.props.board.grid;
         const validMoves = startPiece.moves(grid).map(coords => coords.join(','));
         console.log(validMoves);
         if (validMoves.includes(space.value.join(','))) {
@@ -53,12 +53,12 @@ class Board extends Component {
     
     render() {
         const startPiece = this.state.startPiece;
-        const { rows, playersReady } = this.props;
+        const { board, playersReady } = this.props;
         if (playersReady) {
             return (
                 <StyledBoard>
                     {
-                        rows.map((row, rowIdx) => {
+                        board.grid.map((row, rowIdx) => {
                             return (
                                 <Row key={this.generateKey(row[0].HTML)}>
                                     {

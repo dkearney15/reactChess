@@ -1,5 +1,4 @@
 import Piece from './piece.js';
-import Sliding from './sliding/sliding.js';
 import Rook from './sliding/sliding-pieces/rook.js';
 import Bishop from './sliding/sliding-pieces/bishop.js';
 import Queen from './sliding/sliding-pieces/queen.js';

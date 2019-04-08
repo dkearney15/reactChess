@@ -71,6 +71,25 @@ export default class Board {
 		});
 	}
 
+	inCheck() {
+		const grid = this.grid;
+		return grid.some(row => {
+			return row.some(space => {
+				return space.moves && space.moves(grid).some(move => {
+					return grid[move[0]][move[1]].name === 'King';
+				})
+			})
+		})
+	}
+
+	move(startSpace, endSpace) {
+		const startCoords = startSpace.value;
+		const endCoords = endSpace.value;
+		startSpace.value = endCoords;
+		this.grid[startCoords[0]][startCoords[1]] = PieceFactory.getPiece(null, null, startCoords);
+		this.grid[endCoords[0]][endCoords[1]] = startSpace;
+	}
+
 
 	// evaluate(turnColor) {
 	// 	const board = this; //for sanity and scoping issues
