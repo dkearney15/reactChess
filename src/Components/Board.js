@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { shuffle } from 'lodash';
 
+import { intoCheck } from '../Utils/chess.js';
+
 import StyledBoard from '../StyledComponents/board.js';
 import Row from '../StyledComponents/row.js';
 import Space from '../StyledComponents/space.js';
@@ -37,10 +39,10 @@ class Board extends Component {
     finishMove = space => {
         // validate here
         const startPiece = this.state.startPiece;
-        const grid = this.props.board.grid;
-        const validMoves = startPiece.moves(grid).map(coords => coords.join(','));
-        console.log(validMoves);
-        if (validMoves.includes(space.value.join(','))) {
+        const board = this.props.board;
+        const moves = startPiece.moves(board.grid).map(coords => coords.join(','));
+
+        if (moves.includes(space.value.join(',')) && !intoCheck(board, startPiece, space)) {
             this.props.dispatch(move(startPiece, space));
             this.props.dispatch(incrementTurnCount());            
         }

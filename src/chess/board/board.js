@@ -73,13 +73,13 @@ export default class Board {
 
 	inCheck() {
 		const grid = this.grid;
-		return grid.some(row => {
-			return row.some(space => {
-				return space.moves && space.moves(grid).some(move => {
-					return grid[move[0]][move[1]].name === 'King';
-				})
-			})
-		})
+		return grid.reduce((status, row) => {
+			return row.reduce((status, space) => {
+				return space.moves && space.moves(grid).reduce((status, move) => {
+					return grid[move[0]][move[1]].name === 'King' ? grid[move[0]][move[1]].color : status;
+				}, '') || status;
+			}, '') || status;
+		}, '');
 	}
 
 	move(startSpace, endSpace) {
