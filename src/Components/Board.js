@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { shuffle } from 'lodash';
 
-import { intoCheck } from '../Utils/chess.js';
-
 import StyledBoard from '../StyledComponents/board.js';
 import Row from '../StyledComponents/row.js';
 import Space from '../StyledComponents/space.js';
@@ -12,17 +10,16 @@ import { move } from '../Actions/boardActions.js';
 import { incrementTurnCount } from '../Actions/turnActions.js';
 
 function mapStateToProps(state) {
+    const board = state.board;
+    const turnTakingColor = state.turns % 2 === 0 ? 'white' : 'black';
+    const validMoves = board.validMoves(turnTakingColor);
     return {
-        board: state.board,
-        turnTakingColor: state.turns % 2 === 0 ? 'white' : 'black',
-        playersReady: state.players.white && state.players.black
+        board,
+        turnTakingColor,
+        playersReady: state.players.white && state.players.black,
+        validMoves
     };
 }
-
-function mapDispatchToProps(dispatch) {
-    return { }
-}
-
 
 class Board extends Component {
     constructor (props) {
@@ -39,10 +36,9 @@ class Board extends Component {
     finishMove = space => {
         // validate here
         const startPiece = this.state.startPiece;
-        const board = this.props.board;
-        const moves = startPiece.moves(board.grid).map(coords => coords.join(','));
-
-        if (moves.includes(space.value.join(',')) && !intoCheck(board, startPiece, space)) {
+        const pieceValidMoves = this.props.validMoves[startPiece.value.join(',')];
+        
+        if (pieceValidMoves.includes(space.value.join(','))) {    
             this.props.dispatch(move(startPiece, space));
             this.props.dispatch(incrementTurnCount());            
         }
@@ -55,8 +51,11 @@ class Board extends Component {
     
     render() {
         const startPiece = this.state.startPiece;
-        const { board, playersReady } = this.props;
-        if (playersReady) {
+        const { board, playersReady, turnTakingColor, validMoves } = this.props;
+        const availMoves = Object.values(validMoves).filter(val => val.length)
+        if (!availMoves.length) {
+            return (<div>Checkmate! {turnTakingColor} loses!</div>)
+        } else if (playersReady) {
             return (
                 <StyledBoard>
                     {
@@ -69,7 +68,7 @@ class Board extends Component {
                                             return <Space
                                                 key={this.generateKey(space.HTML)}
                                                 onClick={() => startPiece ? this.finishMove(space) : this.startMove(space)}
-                                                eligiblePiece={startPiece || space.color === this.props.turnTakingColor} 
+                                                eligiblePiece={startPiece || space.color === turnTakingColor} 
                                                 startPiece={startPiece === space}
                                                 displayColor={color}>
                                                 {space.HTML}
