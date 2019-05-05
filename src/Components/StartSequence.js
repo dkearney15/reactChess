@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import Button from '../StyledComponents/utils/button';
 import PlayerCreation from './PlayerCreation';
 
+import StartWrap from '../StyledComponents/startWrap.js';
+
 function mapStateToProps(state) {
     return {
         whitePlayer: state.players.white,
@@ -20,12 +22,12 @@ function mapDispatchToProps(dispatch) {
 class StartSequence extends Component {
     render() {
         const { whitePlayer, blackPlayer } = this.props;
+        if (whitePlayer && blackPlayer) return <div></div>
         return (
-            <div>
+            <StartWrap>
                 { !whitePlayer ? <PlayerCreation player="white"/> : null }
                 { !blackPlayer ? <PlayerCreation player="black"/> : null }
-                <Button textColor="#7e7f82" backColor="black" disabled={!(whitePlayer && blackPlayer)}>Start Game</Button>
-            </div>
+            </StartWrap>
         );
     }
 }

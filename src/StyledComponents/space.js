@@ -4,6 +4,8 @@ export default styled.div`
     background-color: ${props => {
         if (props.startPiece) {
             return '#b7cec9';
+        } else if (props.playDisplay) {
+            return 'transparent'
         } else {
             return props.displayColor === 'white' ? '#cccdce' : '#7e7f82';
         }

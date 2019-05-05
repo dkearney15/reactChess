@@ -13,11 +13,13 @@ function mapStateToProps(state) {
     const board = state.board;
     const turnTakingColor = state.turns % 2 === 0 ? 'white' : 'black';
     const validMoves = board.validMoves(turnTakingColor);
+    const turnTaker = state.players[turnTakingColor];
     return {
         board,
         turnTakingColor,
         playersReady: state.players.white && state.players.black,
-        validMoves
+        validMoves,
+        turnTaker
     };
 }
 
@@ -40,7 +42,7 @@ class Board extends Component {
         
         if (pieceValidMoves.includes(space.value.join(','))) {    
             this.props.dispatch(move(startPiece, space));
-            this.props.dispatch(incrementTurnCount());            
+            this.props.dispatch(incrementTurnCount());
         }
         this.setState({startPiece: null});
     }
@@ -49,12 +51,31 @@ class Board extends Component {
         return shuffle(`${pre}_ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_${ new Date().getTime() }`.split('')).join('').slice(0,20);
     }
     
+    componentDidUpdate(prevProps, prevState) {
+        const { turnTaker, board, validMoves } = this.props;
+        const availKeys = Object.keys(validMoves).filter(val => validMoves[val].length > 0);
+        const randomKey = availKeys[Math.floor(Math.random() * availKeys.length)];
+        const movesForKey = validMoves[randomKey];
+        const randomMove = {
+            start: randomKey.split(','),
+            end: movesForKey[Math.floor(Math.random() * validMoves[randomKey].length)].split(','),
+        };
+        if (turnTaker.type !== 'human') {
+            turnTaker.getMoveFromServer(board, randomMove).then(moveToMake => {
+                const startPiece = this.props.board.grid[moveToMake.start[0]][moveToMake.start[1]];
+                const endPiece = this.props.board.grid[moveToMake.end[0]][moveToMake.end[1]];
+                this.props.dispatch(move(startPiece, endPiece));
+                this.props.dispatch(incrementTurnCount());
+            });
+        }
+    }
+
     render() {
         const startPiece = this.state.startPiece;
         const { board, playersReady, turnTakingColor, validMoves } = this.props;
-        const availMoves = Object.values(validMoves).filter(val => val.length)
+        const availMoves = Object.values(validMoves).filter(val => val.length);
         if (!availMoves.length) {
-            return (<div>Checkmate! {turnTakingColor} loses!</div>)
+            return <div>Checkmate! {turnTakingColor} loses!</div>
         } else if (playersReady) {
             return (
                 <StyledBoard>

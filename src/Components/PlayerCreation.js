@@ -5,6 +5,8 @@ import { setPlayer } from '../Actions/playerActions';
 
 import Player from '../chess/player/player.js';
 
+import PlayerCreationStyle from '../StyledComponents/playerCreation.js';
+
 class PlayerCreation extends Component {
     constructor (props) {
         super();
@@ -16,23 +18,34 @@ class PlayerCreation extends Component {
     changeName = event => {
         this.setState({name: event.target.value});
     }
+
+    changeType = event => {
+        this.setState({type: event.target.value});
+    }
     
     createPlayer = event => {
         const color = this.props.player;
-        const newPlayer = new Player(color, this.state.name);        
+        const newPlayer = new Player(color, this.state.name, this.state.type); 
         this.props.dispatch(setPlayer(color, newPlayer));
         event.preventDefault(); 
     }
     
     render() {
         return (
-            <form onSubmit={this.createPlayer}>
-                <label>
-                    Player {this.props.player} Name:
-                    <input type="text" value={this.props.value} onChange={this.changeName} />
-                </label>
-                <input type="submit" value="Submit" />
-            </form>
+            <PlayerCreationStyle onSubmit={this.createPlayer}>
+                <div>{this.props.player}</div>
+                <div>
+                    <label>
+                        Name:
+                        <input type="text" value={this.props.value} onChange={this.changeName} />
+                    </label>        
+                    <select onChange={this.changeType}>
+                        <option value="human">Human</option>
+                        <option value="computer">Computer</option>
+                    </select>
+                    <input type="submit" value="Submit" />
+                </div>
+            </PlayerCreationStyle>
         );
     }
 }

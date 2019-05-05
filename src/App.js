@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 
-import Board from './Components/Board';
+import Game from './Components/Game';
 import StartSequence from './Components/StartSequence';
+import RootStyle from './index.css';
 
 class App extends Component {
   render() {
     return (
       <div className="App">
-        <Board />
+        <Game />
         <StartSequence />
       </div>
     );
